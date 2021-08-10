@@ -1,0 +1,456 @@
+Hash Indexes:
+The way a hash index would work is that the column value will be the key into the hash table and the actual value
+mapped to that key would just be a pointer to the row data in the table, data that is stored inside the B- tree
+can be sorted.
+
+The reason B- trees are the most popular data structure for indexes is due to the fact that they are time efficient –
+because look-ups, deletions, and insertions can all be done in logarithmic time.
+
+Since a hash table is basically an associative array, a typical entry would look something like “Jesus => 0x28939”,
+where 0x28939 is a reference to the table row where Jesus is stored in memory. Looking up a value like “Jesus” in a hash
+table index and getting back a reference to the row in memory is obviously a lot faster than scanning the table to find
+all the rows with a value of “Jesus” in the Employee_Name column.
+
+Hash tables are not sorted data structures, and there are many types of queries which hash indexes can not even help
+with. For instance, suppose you want to find out all of the employees who are less than 40 years old. How could you do
+that with a hash table index? Well, it’s not possible because a hash table is only good for looking up key value pairs
+–which means queries that check for equality (like “WHERE name = ‘Jesus'”). What is implied in the key value mapping in
+a hash table is the concept that the keys of a hash table are not sorted or stored in any particular order. This is why
+hash indexes are usually not the default type of data structure used by database indexes – because they aren’t as
+flexible as B- trees when used as the index data structure.
+
+
+[Yesterday 4:21 PM] Wakefield,Jody
+so... I'm not as familiar with that cluster but I know with Bowser (and this may be true for Sheik) it's so small that you don't get the same economies of scale from the hardware.... resources are allocated in containers that generally align with CPU's w/ set chunks of memory (set in the sense that there's a minimum allocation) ... so, it's possible that there aren't sensible divisions of resources assignable with a smaller number of running jobs than it would seem from what is available in aggregate.
+[Yesterday 4:23 PM] Wakefield,Jody
+take that with a grain of salt since I haven't looked at the details in the cluster ... but it's something that is more likely to be an issue in a smaller cluster (the allocation tuning becomes particularly important and very difficult if the usage needs vary widely ... i.e. are jobs memory bound or CPU bound or both, etc.)...
+[Yesterday 4:26 PM] Wakefield,Jody
+another thing that can lead to issues like what I think I'm seeing in those screenshots is how the application manager resources are configured... again in a small cluster, if you hit the end of available AM resources, subsequent jobs are stuck in line waiting to be kicked off even if there are processing resources available... the tuning needs to take into account specific usage (not easy to really know until you see how things behave in the actual environment).
+
+it's what the resource manager allocates to manage the job ... spins up a container with the application manager(AM) that keeps track of all the actual tasks and schedules them and allocates the individual resources, etc.
+
+for app managers, separate from the actual job resources... it's one way you can manage overall load to prevent contention and bottlenecks (by forcing a line to start basically if there is too much demand) ... but if tuned wrong, you may introduce that line to start when it isn't necessary or beneficial.
+
+
+
+Re-import IntelliJ:
+the steps below..
+	1. open File > Project Structure...,
+	2. go to Modules tab,
+	3. select all modules and press the remove button,
+then removing all remaining Maven modules from Maven tool window:
+	1. select all modules,
+	2. right click on them,
+	3. press Remove projects,
+and then adding them again in Project tool window:
+	1. right click on root pom.xml,
+	2. press Add as Maven project,
+now unignoring any ignored modules from Maven tool window:
+	1. select all ignored (grey) Maven modules,
+	2. right click on them,
+	3. press Unignore,
+and finally rebuilding using Build > Rebuild project. This assumes that a mvn clean install already happened (in intelliJ's terminal).
+
+
+
+HBase:
+go to hbase master
+do
+hbase shell
+scan '<table_name>'
+then check for columns
+
+
+Exploring jar
+jar -xf clinical-standard-uk-v2-rules-1.29.0-SNAPSHOT.jar
+jar cMf "clinical-standard-uk-v2-rules-1.29.0-SNAPSHOT.jar" -C "/Users/as066852/Documents/HI-126054-HW" *
+java -jar avro-tools-1.8.2.jar tojson record.avro > tost.json
+java -jar ~/avro-tools-1.7.4.jar fromjson --schema-file twitter.avsc twitter.json > twitter.avro
+
+
+
+Avro Tools:
+Get the schema for the avro
+java -jar avro-tools-1.9.2.jar getschema part-r-00000.avro > we.avsc
+Convert the avro to a json.
+java -jar avro-tools-1.9.2.jar tojson part-r-00000.avro > Allergy.json
+Edit the Json with an editor – I can help you with the format
+Convert the Json back to avro
+java -jar avro-tools-1.9.2.jar fromjson --schema-file we.avsc Allerg1.json > part-r-00000.avro
+
+
+
+Hadoop commands:
+yarn application -movetoqueue <app_id> -queue <queue_name>
+yarn application -movetoqueue application_1595522764328_910700 -queue test
+yarn application -list
+yarn application -kill <job_id>
+hadoop job -set-priority <job_id> VERY_HIGH
+hdfs dfs -du -h /|egrep " T "|sort -k 3nr,3
+hdfs dfs -du -h /  | grep '[0-9] T' | sort -n -r
+hdfs dfs -du -h /tmp/logs/ | sort -k 4h,4 -k 3n,3|tail
+hdfs dfs -du -h /popHealth/populations/
+hdfs dfs -df -h /tmp/logs/as066852
+find /tmp/ -maxdepth 1 -user as066852 -exec rm -rf {} \; &
+In general to find stuff(medications in this case):
+hdfs dfs -ls -R /popHealth/populations/e9681937-5742-4cc2-9077-be6e6095dd9a/programs/outputs/versions/*/*/*/*/populationRecordEntities/medications/*00000*
+
+
+GIT:
+git checkout master
+git remote add upstream <github master>
+git fetch upstream
+git rebase upstream/master
+git checkout <branch_name>
+git merge master
+
+git remote add upstream <github url>
+git fetch upstream
+git merge upstream/master <branch>
+
+git tag -a 1.1 b9d8503aa56eb2499d1b2e394055b97e6d42a83d -m "version 1.1"
+git push origin 1.1
+git push --delete origin v1.0
+git commit --amend --no-edit
+bundle update --conservative healtherecord_engine
+
+.gitconfig
+[user]
+	name = username
+	email = email@id.com
+	name = Abhishek
+[github]
+	user = username
+[alias]
+	a = add
+	ca = commit -a
+	cam = commit -am
+	s = status
+	pom = push origin master
+	pog = push origin gh-pages
+	puom = pull origin master
+	puog = pull origin gh-pages
+	cob = checkout -b
+	co = checkout
+	br = branch
+	st = status
+	ci = commit
+[credential]
+	helper = osxkeychain
+# git pull will try to rebase automatically so we don't get the ugly merge commit
+[pull]
+	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+
+Kafka:
+advertised.listeners=PLAINTEXT://<server-ip-address>:9092
+zookeeper.connect=localhost:2181
+JMX_PORT=8004 bin/kafka-server-start.sh config/server.properties
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/cmak -Dconfig.file=conf/application.conf -Dhttp.port=8080
+PATH=/usr/local/Cellar/openjdk@11/11.0.10//bin:$PATH JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.10/ ./sbt -java-home /usr/local/Cellar/openjdk@11/11.0.10/ clean dist
+
+
+Pass Manager:
+pass               # to see the structure
+pass -c <name>
+pass generate -c <name>    #generates and replaces the password for you automatically
+
+
+Docker:
+docker-machine kill default
+docker-machine rm -f default
+docker-machine create --driver virtualbox default
+docker-machine ls
+docker-machine env default
+eval $(docker-machine env default)
+docker run hello-world
+
+
+
+django:
+• You can use the setUpTestData() method for anything that should persist for the whole test case. setUp() is called at the start of every test method. setUpTestData() can be helpful if you need several methods for testing different queries on the same data, or to re-use common objects like users or clients.
+• Python's unittest.mock will be very important to learn. It will let you stub out methods, including inherited ones, which is useful for keeping unit tests focused on just the method at hand. It also helps you avoid third-party dependencies like external APIs, files, or the clock which could change over time or not be accessible.
+• I see you're using the Django test client to test your API endpoint. I think that's fine; you're using it to test the get method on your view so it makes sense. As you start to make more complicated views though, I suggest doing the bulk of your testing by simply calling the methods you want to test instead of simulating hitting the endpoint. That way, you can unit test individual methods. For example, we'll often have unit tests for get_context_data() (just an example of a common Django view method you might override), which oftentimes will have logic split into other functions that we unit test directly.
+
+
+bash:
+source ~/.profile
+#changing color scheme in iTerm2
+export CLICOLOR=1
+export TERM=xterm-256color
+export LSCOLORS=ExFxBxDxCxegedabagacad
+alias ls='ls -GFh'
+
+#changing the style of prompt
+export PS1="\[\033[36m\]\h\[\033[m\]@\[\033[32m\]\u:\[\033[33;1m\]\w\[\033[m\]\$ "
+export PS2="\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[32;47m\]\\$\[\e[m\]"
+
+# Load the default .profile
+# [[ -s "$HOME/.profile" ]] && source "$HOME/.profile"
+
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# set JAVA-HOME
+export JAVA_8_HOME='/Library/Java/JavaVirtualMachines/jdk1.8.0_281.jdk/Contents/Home'
+export JAVA_11_HOME='/Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home'
+alias java8='export JAVA_HOME=$JAVA_8_HOME'
+alias java11='export JAVA_HOME=$JAVA_11_HOME'
+
+export PATH=$JAVA_HOME/bin:/usr/local/opt/scala@2.11/bin:$PATH:
+
+# alias for postgres
+alias pg_start='pg_ctl -D /usr/local/var/postgres start'
+alias pg_stop='pg_ctl -D /usr/local/var/postgres stop'
+
+# alias for pass manager
+alias passpush="pass git add . && pass git commit -m 'passwords changed with the current quarter' && pass git push"
+
+# Reset DB setup for patient consent service
+alias resetRailsProject="bin/rails db:environment:set RAILS_ENV=development; rake db:drop; rake db:create; rake db:migrate; rake db:setup; rails s"
+
+
+# Avro tools conersions
+alias tojson='java -jar /usr/local/bin/avro-tools-1.9.2.jar tojson'
+alias fromjson='java -jar /usr/local/bin/avro-tools-1.9.2.jar fromjson --schema-file'
+alias getschema='java -jar /usr/local/bin/avro-tools-1.9.2.jar getschema'
+
+
+# Django-movies-project-env-variables
+export DEBUG_VALUE='True'
+export DJ_SECRET_KEY='k7%1c(y2to&ftn*dsoj2u$rr#4xy&yq&*(-zmbb=knt8$)ch@a'
+export moviedb_key='?api_key=d9f9b05756eff52422fff84afbf1d510'
+export moviedb_url='https://api.themoviedb.org/3/'
+export moviedb_rest_url='&language=en-US&external_source=imdb_id'
+export rapid_host='imdb8.p.rapidapi.com'
+export rapid_key='ca29ea14b0msh1ab52fe647582f5p11af4fjsn4ae34b31435d'
+export rapid_url='https://imdb8.p.rapidapi.com/title/'
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/opt/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+
+# Kafka - Zookeeper start commands aliases
+alias kafka-start='JMX_PORT=8004 /usr/local/Cellar/kafka/2.8.0/libexec/bin/kafka-server-start.sh /usr/local/Cellar/kafka/2.8.0/libexec/config/server.properties'
+alias zookeeper-start='/usr/local/Cellar/kafka/2.8.0/libexec/bin/zookeeper-server-start.sh /usr/local/Cellar/kafka/2.8.0/libexec/config/zookeeper.properties'
+alias kafka-manager-start='/Users/abhisheksingh/gitRepos/CMAK/target/universal/cmak-3.0.0.5/bin/cmak -Dconfig.file=/Users/abhisheksingh/gitRepos/CMAK/target/universal/cmak-3.0.0.5/conf/application.conf -Dhttp.port=1010'
+
+
+eval export PATH="/Users/abhisheksingh/.jenv/shims:${PATH}"
+export JENV_SHELL=bash
+export JENV_LOADED=1
+unset JAVA_HOME
+source '/usr/local/Cellar/jenv/0.5.4/libexec/libexec/../completions/jenv.bash'
+jenv rehash 2>/dev/null
+jenv refresh-plugins
+jenv() {
+  typeset command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  enable-plugin|rehash|shell|shell-options)
+    eval `jenv "sh-$command" "$@"`;;
+  *)
+    command jenv "$command" "$@";;
+  esac
+}
+
+
+# Spark-hadoop vbariables
+export SPARK_HOME='/Users/abhisheksingh/Spark/spark-3.0.2-bin-hadoop2.7'
+export PATH=$SPARK_HOME:$PATH
+export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
+export PYSPARK_DRIVER_PYTHON='jupyter'
+export PYSPARK_DRIVER_PYTHHON_OPTS='notebook'
+export PYSPARK_PYTHON=python3
+
+
+
+advertised.listeners=PLAINTEXT://<server-ip-address>:9092
+zookeeper.connect=localhost:2181
+
+
+JMX_PORT=8004 bin/kafka-server-start.sh config/server.properties
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+bin/cmak -Dconfig.file=conf/application.conf -Dhttp.port=1011
+
+
+PATH=/Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home/bin:$PATH JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home ./sbt -java-home /Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home clean dist
+
+
+export SPARK_HOME=''
+export PATH=$SPARK_HOME:$PATH
+export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
+export PYSPARK_DRIVER_PYTHON='jupyter'
+export PYSPARK_DRIVER_PYTHHON_OPTS='notebook'
+export PYSPARK_PYTHON=python3
+
+
+org.apache.spark:spark-streaming-kafka-0-8_2.11:2.2.0
+org.apache.spark:spark-sql-kafka-0-10_2.11:2.0.2
+
+kafka-console-consumer --bootstrap-server localhost:9092 --topic twitterdata --from-beginning
+
+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
+
+
+¯\_(ツ)_/¯
+
+
+require 'benchmark'
+
+def get_normalcy_indicator_include(value)
+  if value.upcase.include?('HI')
+    'HIGH'
+  elsif value.upcase.include?('LO')
+    'LOW'
+  elsif value.upcase.include?('CRIT')
+    'CRITICAL'
+  elsif value.upcase.include?('NORM')
+     'NORMAL'
+  else
+    'UNKNOWN'
+  end
+end
+
+def get_normalcy_indicator_match(value)
+  if value.upcase.match(/([HI])/)
+    'HIGH'
+  elsif value.upcase.match(/([LO])/)
+    'LOW'
+  elsif value.upcase.match(/([CRIT])/)
+    'CRITICAL'
+  elsif value.upcase.match(/([NORM])/)
+     'NORMAL'
+  else
+    'UNKNOWN'
+  end
+end
+
+Benchmark.bm do |x|
+  x.report { 50000.times { a = get_normalcy_indicator_include('aklsdjfnormkjkksdf') } }
+  x.report { 50000.times { a = get_normalcy_indicator_match('aklsdjfnormkjkksdf') } }
+end
+
+
+
+the source validation dashboard works as I want to develop something similar for us to track the pipelines, as I dont know if you're aware we tend to have this stale data issue in Analytics from time to time.. so just want to learn how the one that you have works and if its feasible to implement the same for us.
+data pipelines connecting data warehouses and data lakes to business intelligence dashboards via analytics and machine learning engines.
+delivery of data pipelines, recommendations, or alternatives that address existing and potential challenges in data sources, systems, and analysis across the organization as identified by the project proposals.
+Integrate systems for end-to-end data pipelines and delivering business intelligence via ETL, data preparation and cloud-scale data visualization engines
+Acquires new skills to meet demands of any new emerging challenges, technologies, tasks, projects, etc.
+
+
+
+
+CREATE EXTERNAL TABLE HI_229101_AFTER
+ROW FORMAT
+SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+STORED AS
+INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+LOCATION 'hdfs://sheik/popHealth/populations/0f831cc2-a7a4-4d09-b870-b3ce456a0647/programs/outputs/versions/HI-229101-AFTER/programGroups/6fab1716-ec42-43db-9dc8-03d764048505/outcomes'
+TBLPROPERTIES ('avro.schema.url'='hdfs:///popHealth/models/avro/json/com.cerner.pophealth.program.models.avro.outcome.PersonProgramOutcomes.json');
+
+
+
+CREATE EXTERNAL TABLE HI_229101_BEFORE
+ROW FORMAT
+SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+STORED AS
+INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+LOCATION 'hdfs://sheik/popHealth/populations/0f831cc2-a7a4-4d09-b870-b3ce456a0647/programs/outputs/versions/HI-229101-BEFORE/programGroups/6fab1716-ec42-43db-9dc8-03d764048505/outcomes'
+TBLPROPERTIES ('avro.schema.url'='hdfs:///popHealth/models/avro/json/com.cerner.pophealth.program.models.avro.outcome.PersonProgramOutcomes.json');
+
+
+
+
+select new_out.programId as new_programId, old_out.programId as old_programId, new_out.qualifiedName as new_qualifiedName, old_out.qualifiedName as old_qualifiedName, new_out.state as new_state , old_out.state as old_state, new_out.aftr as new_count, old_out.befor as old_count, new_out.aftr - old_out.befor as diff
+from
+(select
+measure.programId,
+measure.qualifiedName,
+measure.state,
+count(*) as befor
+from
+default.HI_229101_BEFORE lateral view explode(measureoutcomes) measureTable as measure
+group by
+measure.programId,
+measure.qualifiedName,
+measure.state) old_out
+full outer join
+(select
+measure.programId,
+measure.qualifiedName,
+measure.state,
+count(*) as aftr
+from
+default.HI_229101_AFTER lateral view explode(measureoutcomes) measureTable as measure
+group by
+measure.programId,
+measure.qualifiedName,
+measure.state) new_out
+on
+(old_out.programId = new_out.programId and old_out.qualifiedName = new_out.qualifiedName and old_out.state = new_out.state);
+
+
+
+IDENTIFICATION===>>>
+
+
+
+select new_out.qualifiedname as new_qualifiedname, old_out.qualifiedname as old_qualifiedname, new_out.programid as new_programid, old_out.programid as old_programid, new_out.isidentified as new_state , old_out.isidentified as old_state, new_out.aftr as new_count, old_out.befor as old_count, new_out.aftr - old_out.befor as diff
+from
+(select
+     identification.qualifiedname,
+     identification.programid,
+     identification.isidentified,
+     identification.programversion,
+     count(*) as befor
+from
+     default.HI_229101_BEFORE lateral view explode(identificationoutcomes) identificationTable as identification
+group by
+    identification.qualifiedname,
+     identification.programid,
+     identification.isidentified,
+     identification.programversion) old_out
+full outer join
+(select
+     identification.qualifiedname,
+     identification.programid,
+     identification.isidentified,
+     identification.programversion,
+     count(*) as aftr
+from
+     default.HI_229101_AFTER lateral view explode(identificationoutcomes) identificationTable as identification
+group by
+     identification.qualifiedname,
+     identification.programid,
+     identification.isidentified,
+     identification.programversion) new_out
+on
+(old_out.qualifiedname = new_out.qualifiedname and old_out.programid = new_out.programid and old_out.isidentified = new_out.isidentified);

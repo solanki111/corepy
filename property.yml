@@ -1,0 +1,11 @@
+EMAIL_USER : ''
+EMAIL_PASSWORD : ''
+EMAIL_BODY : 'There has been a failure while uploading the data via HIDUU: '
+EMAIL_SUBJECT : 'Error: Failure Encountered while running the data upload script!'
+EMAIL_RECIPIENTS : ['']
+EMAIL_SENDER : ''
+
+CTYPE : "application/octet-stream"
+SMTP_HOST : ""
+SMTP_ERROR : 'SMTP error occurred: '
+SMTP_SPARKPOST_HOST : ""

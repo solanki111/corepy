@@ -16,24 +16,10 @@ def distinct(iterable):
         seen.add(item)
 
 
-
 def run_pipeline():
     items = [3, 6, 6, 2, 1, 1]
     for item in take(3, list(distinct(items))):
         print(item)
 
 
-run_pipeline()
-
-
-def lucas():
-    yield 2
-    a = 2
-    b = 1
-    while True:
-        yield b
-        a, b = b, a + b
-
-for x in lucas():
-    print(x)
-
+# run_pipeline()

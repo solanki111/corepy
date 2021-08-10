@@ -1,0 +1,7 @@
+{
+  "HIDUU_EXEC_PATH_UNIX": "/utilities/hi-data-upload-utility-3.0/bin/./hi-data-upload-utility",
+  "UPLOAD_DATASET": "uploadDataSetFile",
+  "SYSTEM_ACC_ID": "-said",
+  "ACC_ID_KEY": "SECRET_KEY1",
+  "SYS_ACC_SECRET": "-sas"
+}

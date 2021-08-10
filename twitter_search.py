@@ -15,6 +15,7 @@ def url_fix(s, charset='utf-8'):
     qs = urllib.quote_plus(qs, ':&=')
     return urlparse.urlunsplit((scheme, netloc, path, qs, anchor))
 
+
 # COMMAND PARSER
 def tw_parser():
     global qw, ge, l, t, c, d
@@ -125,7 +126,7 @@ def tw_search(api):
     #Use csv Writer
     csvWriter = csv.writer(csvFile)
     csvWriter.writerow(["created", "text", "retwc", "hashtag", "followers", "friends"])
-	
+
     for tweet in tweepy.Cursor(api.search,
                                 q = qw,
                                 g = ge,

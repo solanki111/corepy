@@ -1,0 +1,5 @@
+06-08-21 09:40:03 - Read the property file!
+06-08-21 09:40:03 - Preparing message for sending email notifications..
+06-08-21 09:40:03 - Message prepared!
+06-08-21 09:40:03 - attaching logs into the email
+06-08-21 09:40:10 - Email sent!
